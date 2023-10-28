@@ -22,7 +22,7 @@ def submit_data(request):
             # Process the form data and save it to the database
             form.save()
             # You can add a success message or other logic here
-            return redirect('list_and_submit_pitches')  # Redirect back to the same page
+            return redirect('submit_data')  # Redirect back to the same page
 
     else:
         form = PitchingForm()  # Create a new form instance for rendering
