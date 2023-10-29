@@ -1,5 +1,52 @@
-<h1>home of Dashboard</h1>
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home of Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0; /* Set background color to #f0f0f0 */
+            text-align: center;
+        }
+        .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #333; /* Change the background color as needed */
+        color: #fff; /* Change the text color as needed */
+        padding: 10px 20px;
+        }
+        
+        /* Style for the buttons */
+        .navbar-button {
+            margin: 0 10px;
+            padding: 5px 10px;
+            background-color: #555; /* Change the button background color */
+            border: none;
+            color: #fff; /* Change the button text color */
+            cursor: pointer;
+        }
+
+        /* Style for the "dataBase" text */
+        .navbar-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
+</head>
 <body>
-    <iframe title="Report Section" width="1000" height="1000" src="https://app.powerbi.com/view?r=eyJrIjoiZWZlZGExMTMtZmUzYi00NDA1LTlkMzAtMGEzYTc3ODI4N2MzIiwidCI6IjRiNWQ0NWY5LTY0MTMtNGVmNS1hODFhLTIyYzRiZTM5OTYxNiJ9" frameborder="0" allowFullScreen="true">
+    <div class="navbar">
+        <div class="navbar-title">dataBase</div>
+        <div>
+            <a href="{% url 'home' %}" class="navbar-button">Home</a>
+            <a href="{% url 'submit_data' %}" class="navbar-button">Dashboard</a>
+        </div>
+    </div> 
+    <iframe title="Report Section" width="1000" height="600" src="https://app.powerbi.com/view?r=eyJrIjoiZWZlZGExMTMtZmUzYi00NDA1LTlkMzAtMGEzYTc3ODI4N2MzIiwidCI6IjRiNWQ0NWY5LTY0MTMtNGVmNS1hODFhLTIyYzRiZTM5OTYxNiJ9" frameborder="0" allowFullScreen="true">
     </iframe>
 </body>
