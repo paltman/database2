@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    {% load static %}
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to dataBase</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+        }
+        .container {
+            background-color: #ffffff;
+            margin: 100px auto;
+            max-width: 600px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        h1 {
+            font-size: 24px;
+        }
+        p {
+            font-size: 18px;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="{% static 'dataentry/img/dataBASE.png' %}" alt="dataBase Logo" width="200" height="200">
+        <h1>Welcome to dataBase</h1>
+        <p>Click to start tracking your data!</p>
+        <a href="{% url 'submit_data' %}" class="btn">Start Tracking</a>
+        <p>Click to view your team's DashBoard</p>
+        <a href="{% url 'dashboard' %}" class="btn">View Dashboard</a>
+    </div>
+
+</body>
+</html>

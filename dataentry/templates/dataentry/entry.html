@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .form {
+            flex: 1;
+            padding: 20px;
+        }
+        .table-container {
+            flex: 1;
+            background-color: #f0f0f0;
+            padding: 20px;
+            height: 400px; /* Set the desired fixed height */
+            overflow-y: auto; /* Add a vertical scrollbar when needed */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #333;
+            color: #fff;
+        }
+        .table-header {
+            position: sticky;
+            top: 0;
+            background-color: #f0f0f0;
+        }
+        .table thead tr {
+            position: sticky;
+            top: 0;
+            background-color: #f0f0f0;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #ddd;
+        }
+        h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+        .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #333; /* Change the background color as needed */
+        color: #fff; /* Change the text color as needed */
+        padding: 10px 20px;
+        }
+        
+        /* Style for the buttons */
+        .navbar-button {
+            margin: 0 10px;
+            padding: 5px 10px;
+            background-color: #555; /* Change the button background color */
+            border: none;
+            color: #fff; /* Change the button text color */
+            cursor: pointer;
+        }
+
+        /* Style for the "dataBase" text */
+        .navbar-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <div class="navbar-title">dataBase</div>
+    <div>
+        <a href="{% url 'home' %}" class="navbar-button">Home</a>
+        <a href="{% url 'dashboard' %}" class="navbar-button">Dashboard</a>
+    </div>
+</div>    <div class="container">
+        <h1>Submit Data</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Enter Pitch" />
+        </form>
+        <div class="table-container">
+            <h2>Today's Data</h2>
+            <table class="table">
+                <thead>
+                    <tr class="table-header">
+                        <th>Pitch Count</th>
+                        <th>Pitch Type</th>
+                        <th>Velo</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                {% for instance in pitchdata %}
+                    <tr>
+                        <td>{{ instance.pitch_count }}</td>
+                        <td>{{ instance.pitch_type }}</td>
+                        <td>{{ instance.velo }}</td>
+                        <td>{{ instance.result }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</body>
+</html>
