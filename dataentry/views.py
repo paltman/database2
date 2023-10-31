@@ -14,23 +14,29 @@ def home(request):
 '''data adding page'''
 
 def submit_data(request):
-    # Query the most recent entry in the database
-    latest_entry = PitchingData.objects.latest('date')
-    # Extract pitcher and date from the form data
+    # Query the most recent entry in the database. We will use this to auto fill the input values for Team, Date, and Pitcher
+    latest_entry = PitchingData.objects.latest('id')
+    # Extract pitcher and date from the form data. We will use this to Query the dataset and auto count pitches 
+    #    based on how pitchers on that specific day. So when you change pitchers or Joe pitches on another day the pitch counter resets
     pitcher = request.POST.get('pitcher')
     date = request.POST.get('date')
+    team = request.POST.get('team')
 
-    # Calculate the maximum pitch count for the specified pitcher and date
+    # Calculate the maximum pitch count for the specified pitcher and date. This is where we get the latest pitch count!!!
+    #    %s = the input
     with connection.cursor() as cursor:
         cursor.execute(
             """
             SELECT MAX(pitch_count) FROM dataentry_pitchingdata
-            WHERE pitcher = %s AND date = %s
+            WHERE pitcher = %s AND date = %s AND team = %s
             """,
-            [pitcher, date]
+            [pitcher, date, team]
         )
         latest_pitch_count = cursor.fetchone()[0] or 0
 
+    # So, once we hit submit, submit the form and check the data types are valid. Then add 1 as the input for pitch count and save to 
+    #     database
+    # else : so after this, assign the values that we want auto assigned in the input boxes.
     if request.method == 'POST':
         form = PitchingForm(request.POST)
 
@@ -55,8 +61,8 @@ def submit_data(request):
             'date': date_value,
             })
 
-    # Store all data
-    pitchdata = PitchingData.objects.all()
+    # Pull in all the data (for that team and that date, for table view.)
+    pitchdata = PitchingData.objects.filter(team=latest_entry.team, date=date_value)
 
     context = {
         'pitchdata': pitchdata,
