@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-x$!z)4u#y$zy=h$3i1bgvbopr3le8vzoc#43n@9xg6xlvi1im&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['databaseapp.pythonanywhere.com', '127.0.0.1']
 
 
 # Application definition
@@ -83,8 +83,11 @@ DATABASES = {
         'NAME': 'neondb',
         'USER': 'drewbeno1',
         'PASSWORD': 'CEBInvDq13or',
-        'HOST': 'ep-small-silence-60017904.us-east-2.aws.neon.tech',
-        'PORT': '',           # Leave it empty to use the default PostgreSQL port (5432).
+        'HOST': 'ep-small-silence-60017904-pooler.us-east-2.aws.neon.tech',
+        'PORT': '5432',           # Leave it empty to use the default PostgreSQL port (5432).
+            'OPTIONS': {
+            'sslmode': 'require',
+        }     
     }
 }
 
