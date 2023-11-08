@@ -11,6 +11,23 @@ def home(request):
     context = {}
     return render(request, 'dataentry/index.html', context)
 
+
+'''Settings: Set your date, pitcher, and team'''
+def settings(request):
+    if request.method == 'POST':
+        # Get the data from the first form
+        team = request.POST.get('team')
+        pitcher = request.POST.get('pitcher')
+        date_value = request.POST.get('date')
+
+        # Create a new PitchData instance with the provided data and "NA" for other fields
+        pitch_data = PitchingData(team=team, pitcher=pitcher, date=date_value, pitch_count=0, pitch_type=" ", velo=0, result=" ")
+        pitch_data.save()  # Save the data to the database
+
+        # Redirect to a page after successfully submitting data
+        return redirect('submit_data')  # Replace 'success_page' with your desired URL name
+    return render(request, 'dataentry/settings.html')
+
 '''data adding page'''
 
 def submit_data(request):
@@ -19,7 +36,7 @@ def submit_data(request):
     # Extract pitcher and date from the form data. We will use this to Query the dataset and auto count pitches 
     #    based on how pitchers on that specific day. So when you change pitchers or Joe pitches on another day the pitch counter resets
     pitcher = request.POST.get('pitcher')
-    date = request.POST.get('date')
+    date_value = request.POST.get('date')
     team = request.POST.get('team')
 
     # Calculate the maximum pitch count for the specified pitcher and date. This is where we get the latest pitch count!!!
@@ -30,7 +47,7 @@ def submit_data(request):
             SELECT MAX(pitch_count) FROM dataentry_pitchingdata
             WHERE pitcher = %s AND date = %s AND team = %s
             """,
-            [pitcher, date, team]
+            [pitcher, date_value, team]
         )
         latest_pitch_count = cursor.fetchone()[0] or 0
 
@@ -62,7 +79,7 @@ def submit_data(request):
             })
 
     # Pull in all the data (for that team and that date, for table view.)
-    pitchdata = PitchingData.objects.filter(team=latest_entry.team, date=date_value)
+    pitchdata = PitchingData.objects.filter(team=latest_entry.team, date=date_value, pitch_type__gt=" ")  # Filter for non-empty 'Pitch Type')
 
     context = {
         'pitchdata': pitchdata,

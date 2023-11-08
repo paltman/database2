@@ -36,42 +36,6 @@
             display: flex;
             flex-direction: column;
         }
-
-        .table-container {
-            flex: 1;
-            background-color: #f0f0f0;
-            padding: 20px;
-            height: 400px; /* Set the desired fixed height */
-            overflow-y: auto; /* Add a vertical scrollbar when needed */
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 4px;
-            text-align: center;
-        }
-        th {
-            background-color: #333;
-            color: #fff;
-        }
-        .table-header {
-            position: sticky;
-            top: 0;
-            background-color: #f0f0f0;
-        }
-        .table thead tr {
-            position: sticky;
-            top: 0;
-            background-color: #f0f0f0;
-        }
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        tr:hover {
-            background-color: #ddd;
-        }
         h1 {
             font-size: 20px;
             margin: 0;
@@ -107,6 +71,12 @@
     </style>
 </head>
 <body>
+    <!-- Your JavaScript function for form submission -->
+    <script>
+        function submitFormAndNavigate() {
+            document.getElementById('PitchingForm').submit();
+        }
+    </script>
 
 <div class="navbar">
     <div class="navbar-title">dataBase</div>
@@ -118,57 +88,23 @@
         <div class="container">
         <br>
         <br>
-        <form method="post">
+        <form method="post" id="PitchingForm" action="{% url 'settings' %}">
             {% csrf_token %}
             <label for="id_team">Team:</label>
             <input type="text" id="id_team" name="team" value="{{ form.team.value }}">
             <br>
+            <br>
             <label for="id_pitcher">Pitcher:</label>
             <input type="text" id="id_pitcher" name="pitcher" value="{{ form.pitcher.value }}">
+            <br>
             <br>
             <label for="id_date">Date:</label>
             <input type="date" id="id_date" name="date" value="{{ form.date.value }}">
             <br>
             <br>
             <br>
-            <br>
-            <label >Pitch Type</label>
-            {{ form.pitch_type }}
-            <br>
-            <br>
-            <label >Velo</label>
-            {{ form.velo }}
-            <br>
-            <br>
-            <label >Result</label>
-            {{ form.result }}
-            <br>
-            <br>
-            <input type="submit" value="Submit Pitch" />
+            <input type="button" value="Enter" onclick="submitFormAndNavigate()" />
         </form>
-        <div class="table-container">
-            <h2>Today's Data</h2>
-            <table class="table">
-                <thead>
-                    <tr class="table-header">
-                        <th>Pitcher</th>
-                        <th>Count</th>
-                        <th>Pitch Type</th>
-                        <th>Velo</th>
-                        <th>Result</th>
-                    </tr>
-                </thead>
-                {% for instance in pitchdata %}
-                    <tr>
-                        <td>{{ instance.pitcher }}</td>
-                        <td>{{ instance.pitch_count }}</td>
-                        <td>{{ instance.pitch_type }}</td>
-                        <td>{{ instance.velo }}</td>
-                        <td>{{ instance.result }}</td>
-                    </tr>
-                {% endfor %}
-            </table>
-        </div>
     </div>
 </body>
 </html>

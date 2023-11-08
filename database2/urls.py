@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
     # This initiates the submit_data view
+    path('settings/', views.settings, name='settings'),
     path('submit_data/', views.submit_data, name='submit_data'),
     path('dashboard/', views.dashboard, name='dashboard')
 ]
