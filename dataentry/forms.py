@@ -17,11 +17,22 @@ class PitchingForm(forms.ModelForm):
 
     PITCHER_CHOICES = {
         ('Joe', 'Joe'),
+        ('Candice', 'Candice'),
+        ('Argo', 'Argo'),
+        ('Joe', 'Joe'),
+    }
+
+    TEAM_CHOICES = {
+        ('Bloom', 'Bloom'),
+        ('Suncoast', 'Suncoast'),
+        ('Richmond', 'Richmond'),
     }
 
     # Fields with dropdown lists
     pitch_type = forms.ChoiceField(choices=PITCH_TYPE_CHOICES, widget=forms.Select())
     result = forms.ChoiceField(choices=RESULT_CHOICES, widget=forms.Select())
+    pitcher = forms.ChoiceField(choices=PITCHER_CHOICES, widget=forms.Select())
+    team = forms.ChoiceField(choices=TEAM_CHOICES, widget=forms.Select())
 
     class Meta:
         model = PitchingData
