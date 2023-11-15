@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/ico" sizes="64x64" href="{% static 'dataentry/img/favicon.ico' %}">
+    <title>dataBase</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .form {
+            flex: 1;
+            padding: 1px 20px; /* Adjust top and bottom padding (0px) and left and right padding (20px) */
+            display: flex;
+            flex-direction: column;
+        }
+        h1 {
+            font-size: 20px;
+            margin: 0;
+        }
+        .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #333; /* Change the background color as needed */
+        color: #fff; /* Change the text color as needed */
+        padding: 10px 20px;
+        }
+        
+        /* Style for the buttons */
+        .navbar-button {
+            margin: 0 10px;
+            padding: 5px 10px;
+            background-color: #555; /* Change the button background color */
+            border: none;
+            color: #fff; /* Change the button text color */
+            cursor: pointer;
+        }
+
+        /* Style for the "dataBase" text */
+        .navbar-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Your JavaScript function for form submission -->
+    <script>
+        function submitFormAndNavigate() {
+            document.getElementById('PitchingForm').submit();
+        }
+    </script>
+
+<div class="navbar">
+    <div class="navbar-title">dataBase</div>
+    <div>
+        <a href="{% url 'home' %}" class="navbar-button">Home</a>
+        <a href="{% url 'dashboard' %}" class="navbar-button">Dashboard</a>
+    </div>
+</div>    
+        <div class="container">
+        <br>
+        <br>
+        <form method="post" id="PitchingForm" action="{% url 'settings' %}">
+            {% csrf_token %}
+            <label for="id_team">Team:</label>
+            <input type="text" id="id_team" name="team" value="{{ form.team.value }}">
+            <br>
+            <br>
+            <label for="id_pitcher">Pitcher:</label>
+            <input type="text" id="id_pitcher" name="pitcher" value="{{ form.pitcher }}">
+            <br>
+            <br>
+            <label for="id_date">Date:</label>
+            <input type="date" id="id_date" name="date" value="{{ form.date.value }}">
+            <br>
+            <br>
+            <br>
+            <br>
+            <input type="button" value="Enter" onclick="submitFormAndNavigate()" />
+        </form>
+    </div>
+</body>
+</html>
