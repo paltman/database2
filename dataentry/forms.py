@@ -33,7 +33,6 @@ class PitchingForm(forms.ModelForm):
         ('Joe', 'Joe'),
         ('Candice', 'Candice'),
         ('Argo', 'Argo'),
-        ('Joe', 'Joe'),
     )
 
     TEAM_CHOICES = (
@@ -41,6 +40,12 @@ class PitchingForm(forms.ModelForm):
         ('Suncoast', 'Suncoast'),
         ('Richmond', 'Richmond'),
     )
+
+# Something like this for the dropdown lists
+    # def __init__(self, *args, **kwargs):
+    #     super(PitchingDataForm, self).__init__(*args, **kwargs)
+    #     self.fields['team'].choices = [(team.name, team.name) for team in Team.objects.all()]
+    #     self.fields['pitcher'].choices = [(pitcher.name, pitcher.name) for pitcher in Pitcher.objects.all()]
 
     # Fields with dropdown lists
     pitch_type = forms.ChoiceField(choices=PITCH_TYPE_CHOICES, widget=forms.Select())
