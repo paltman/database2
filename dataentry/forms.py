@@ -7,26 +7,40 @@ class PitchingForm(forms.ModelForm):
     PITCH_TYPE_CHOICES = (
         ('FB', 'Fastball'),
         ('CB', 'Curveball'), 
-        ('CH', 'Changeup'), 
+        ('CH', 'Changeup'),
+        ('SL', 'Slider'),
+        ('Splitter', 'Splitter'),
+        ('Cutter', 'Cutter'),
+        ('Knuck', 'Knuck'),
+        ('EEPHUS', 'Eephus'),
     )
-
+    # Calculate data in the background like when there is a strikeout or a walk
     RESULT_CHOICES = (
-        ('Hit', 'Hit'),
         ('Ball', 'Ball'),
+        ('Strike Looking', 'Strike Looking'),
+        ('Strike Swinging', 'Strike Swinging'),
+        ('Foul Ball', 'Foul Ball'),
+        ('BIP Out', 'BIP Out'),
+        ('Single', 'Single'),
+        ('Double', 'Double'),
+        ('Triple', 'Triple'),
+        ('HR', 'HR'),
+        ('HBP', 'HBP'),
+        ('Drop 3rd & Safe', 'Drop 3d & Safe'),
     )
 
-    PITCHER_CHOICES = {
+    PITCHER_CHOICES = (
         ('Joe', 'Joe'),
         ('Candice', 'Candice'),
         ('Argo', 'Argo'),
         ('Joe', 'Joe'),
-    }
+    )
 
-    TEAM_CHOICES = {
+    TEAM_CHOICES = (
         ('Bloom', 'Bloom'),
         ('Suncoast', 'Suncoast'),
         ('Richmond', 'Richmond'),
-    }
+    )
 
     # Fields with dropdown lists
     pitch_type = forms.ChoiceField(choices=PITCH_TYPE_CHOICES, widget=forms.Select())

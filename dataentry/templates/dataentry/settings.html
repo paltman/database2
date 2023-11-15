@@ -91,11 +91,11 @@
         <form method="post" id="PitchingForm" action="{% url 'settings' %}">
             {% csrf_token %}
             <label for="id_team">Team:</label>
-            <input type="text" id="id_team" name="team" value="{{ form.team.value }}">
+            {{ form.team }}
             <br>
             <br>
             <label for="id_pitcher">Pitcher:</label>
-            <input type="text" id="id_pitcher" name="pitcher" value="{{ form.pitcher }}">
+            {{ form.pitcher }}
             <br>
             <br>
             <label for="id_date">Date:</label>

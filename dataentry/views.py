@@ -26,7 +26,14 @@ def settings(request):
 
         # Redirect to a page after successfully submitting data
         return redirect('submit_data')  # Replace 'success_page' with your desired URL name
-    return render(request, 'dataentry/settings.html')
+    
+    form = PitchingForm()
+
+    context = {
+        'form': form,
+    }
+
+    return render(request, 'dataentry/settings.html', context)
 
 '''data adding page'''
 
