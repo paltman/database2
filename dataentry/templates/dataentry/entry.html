@@ -121,13 +121,13 @@
         <form method="post">
             {% csrf_token %}
             <label for="id_team">Team:</label>
-            <input type="text" id="id_team" name="team" value="{{ form.team.value }}">
+            <input type="text" id="id_team" name="team_name" value="{{ team_name }}" readonly>
             <br>
             <label for="id_pitcher">Pitcher:</label>
-            <input type="text" id="id_pitcher" name="pitcher" value="{{ form.pitcher.value }}">
+            <input type="text" id="id_pitcher" name="pitcher_name" value="{{ pitcher_name }}">
             <br>
             <label for="id_date">Date:</label>
-            <input type="date" id="id_date" name="date" value="{{ form.date.value }}">
+            <input type="date" id="id_date" name="date" value="{{ request.session.date }}">
             <br>
             <br>
             <br>

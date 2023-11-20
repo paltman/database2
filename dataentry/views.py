@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
-from dataentry.forms import PitchingForm
-from dataentry.models import PitchingData
+from dataentry.forms import PitchForm
+from dataentry.models import Pitch, Team, Pitcher
 from django.db import connection
+from django.db.models import Max
 
 
 # Create your views here.
@@ -15,22 +16,21 @@ def home(request):
 '''Settings: Set your date, pitcher, and team'''
 def settings(request):
     if request.method == 'POST':
-        # Get the data from the first form
-        team = request.POST.get('team')
-        pitcher = request.POST.get('pitcher')
-        date_value = request.POST.get('date')
-
-        # Create a new PitchData instance with the provided data and "NA" for other fields
-        pitch_data = PitchingData(team=team, pitcher=pitcher, date=date_value, pitch_count=0, pitch_type=" ", velo=0, result=" ")
-        pitch_data.save()  # Save the data to the database
+        # Set the session variables
+        request.session['team'] = request.POST.get('team')
+        request.session['pitcher'] = request.POST.get('pitcher')
+        request.session['date'] = request.POST.get('date')
 
         # Redirect to a page after successfully submitting data
-        return redirect('submit_data')  # Replace 'success_page' with your desired URL name
-    
-    form = PitchingForm()
+        return redirect('submit_data')  # Replace 'submit_data' with your desired URL name
 
+    teams = Team.objects.all()
+    pitchers = Pitcher.objects.all()
+    # If the request method is not POST (i.e., it's a GET request), render the settings page
     context = {
-        'form': form,
+        'teams': teams,
+        'pitchers': pitchers,
+        'date': request.session.get('date', ''),
     }
 
     return render(request, 'dataentry/settings.html', context)
@@ -38,36 +38,22 @@ def settings(request):
 '''data adding page'''
 
 def submit_data(request):
-    # Query the most recent entry in the database. We will use this to auto fill the input values for Team, Date, and Pitcher
-    latest_entry = PitchingData.objects.latest('id')
-    # Extract pitcher and date from the form data. We will use this to Query the dataset and auto count pitches 
-    #    based on how pitchers on that specific day. So when you change pitchers or Joe pitches on another day the pitch counter resets
-    pitcher = request.POST.get('pitcher')
-    date_value = request.POST.get('date')
-    team = request.POST.get('team')
+    # Get the pitcher, date_value, and team from the session variables
+    pitcher_value = request.session.get('pitcher')
+    date_value = request.session.get('date')
+    team_value = request.session.get('team')
 
-    # Calculate the maximum pitch count for the specified pitcher and date. This is where we get the latest pitch count!!!
-    #    %s = the input
-    with connection.cursor() as cursor:
-        cursor.execute(
-            """
-            SELECT MAX(pitch_count) FROM dataentry_pitchingdata
-            WHERE pitcher = %s AND date = %s AND team = %s
-            """,
-            [pitcher, date_value, team]
-        )
-        latest_pitch_count = cursor.fetchone()[0] or 0
+    # Calculate the maximum pitch count for the specified pitcher and date.
+    pitch_count = Pitch.objects.filter(pitcher=pitcher_value, date=date_value, team=team_value).aggregate(Max('pitch_count'))['pitch_count__max'] or 0
 
-    # So, once we hit submit, submit the form and check the data types are valid. Then add 1 as the input for pitch count and save to 
-    #     database
-    # else : so after this, assign the values that we want auto assigned in the input boxes.
+    # Check if the request method is POST
     if request.method == 'POST':
-        form = PitchingForm(request.POST)
+        form = PitchForm(request.POST)
 
         if form.is_valid():
             # Increment the "Pitch Count" field by 1
-            latest_pitch_count += 1
-            form.instance.pitch_count = latest_pitch_count
+            pitch_count += 1
+            form.instance.pitch_count = pitch_count
 
             # Save the form data to the database
             form.save()
@@ -75,20 +61,25 @@ def submit_data(request):
             # You can add a success message or other logic here
             return redirect('submit_data')  # Redirect back to the same page
     else:
-          # Format the date explicitly
-        date_value = latest_entry.date.strftime('%Y-%m-%d') if latest_entry else None
-
         # Populate the form with the most recent values
-        form = PitchingForm(initial={
-            'team': latest_entry.team if latest_entry else '',
-            'pitcher': latest_entry.pitcher if latest_entry else '',
+        form = PitchForm(initial={
+            'team': team_value,
+            'pitcher': pitcher_value,
             'date': date_value,
             })
 
     # Pull in all the data (for that team and that date, for table view.)
-    pitchdata = PitchingData.objects.filter(team=latest_entry.team, date=date_value, pitch_type__gt=" ")  # Filter for non-empty 'Pitch Type')
+    pitchdata = Pitch.objects.filter(team=team_value, date=date_value)
+    # return the names instead of numbers
+    pitcher = Pitcher.objects.get(id=pitcher_value)
+    pitcher_name = pitcher.name
+
+    team = Team.objects.get(id=team_value)
+    team_name = team.name
 
     context = {
+        'team_name': team_name,
+        'pitcher_name': pitcher_name,
         'pitchdata': pitchdata,
         'form': form,
     }
