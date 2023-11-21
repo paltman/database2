@@ -32,7 +32,7 @@ class PitchForm(forms.ModelForm):
         ('Triple', 'Triple'),
         ('HR', 'HR'),
         ('HBP', 'HBP'),
-        ('Drop 3rd & Safe', 'Drop 3d & Safe'),
+        ('Drop 3rd & Safe', 'Drop 3rd & Safe'),
     )
 
     # This function allows the dropdown lists to be dynamic for team and pitcher.
@@ -51,10 +51,11 @@ class PitchForm(forms.ModelForm):
 
 
     # Fields with dropdown lists
+    pitcher = forms.ModelChoiceField(queryset=Pitcher.objects.all())
     pitch_type = forms.ChoiceField(choices=PITCH_TYPE_CHOICES, widget=forms.Select())
     result = forms.ChoiceField(choices=RESULT_CHOICES, widget=forms.Select())
 
     class Meta:
         model = Pitch
-        fields = ['team', 'date', 'pitcher', 'pitch_type',
+        fields = ['pitcher', 'team', 'date', 'pitch_type',
                   'velo', 'result']

@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from dataentry.forms import PitchForm
 from dataentry.models import Pitch, Team, Pitcher
-from django.db import connection
 from django.db.models import Max
 
 
@@ -22,7 +21,7 @@ def settings(request):
         request.session['date'] = request.POST.get('date')
 
         # Redirect to a page after successfully submitting data
-        return redirect('submit_data')  # Replace 'submit_data' with your desired URL name
+        return redirect('entry')  # Replace 'entry' with your desired URL name
 
     teams = Team.objects.all()
     pitchers = Pitcher.objects.all()
@@ -37,7 +36,7 @@ def settings(request):
 
 '''data adding page'''
 
-def submit_data(request):
+def entry(request):
     # Get the pitcher, date_value, and team from the session variables
     pitcher_value = request.session.get('pitcher')
     date_value = request.session.get('date')
@@ -49,8 +48,13 @@ def submit_data(request):
     # Check if the request method is POST
     if request.method == 'POST':
         form = PitchForm(request.POST)
-
+        print("Form data before validation:", form.data)
+                # Populate the form with the session variables
+        form.initial['team'] = team_value
+        form.initial['pitcher'] = pitcher_value
+        form.initial['date'] = date_value
         if form.is_valid():
+            print('hey')
             # Increment the "Pitch Count" field by 1
             pitch_count += 1
             form.instance.pitch_count = pitch_count
@@ -59,14 +63,15 @@ def submit_data(request):
             form.save()
 
             # You can add a success message or other logic here
-            return redirect('submit_data')  # Redirect back to the same page
+            return redirect('entry')  # Redirect back to the same page
     else:
-        # Populate the form with the most recent values
+        print('form was not validated')
+        # Populate the form with the session variables
         form = PitchForm(initial={
             'team': team_value,
             'pitcher': pitcher_value,
             'date': date_value,
-            })
+        })
 
     # Pull in all the data (for that team and that date, for table view.)
     pitchdata = Pitch.objects.filter(team=team_value, date=date_value)
@@ -85,6 +90,7 @@ def submit_data(request):
     }
 
     return render(request, 'dataentry/entry.html', context)
+
 
 
 

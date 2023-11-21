@@ -22,7 +22,7 @@ class Game(models.Model):
         return self.pitches.filter(pitcher=pitcher).count()
 
 
-class PitchKind(models.TextChoices):
+class PitchType(models.TextChoices):
     FASTBALL = "FB", "Fastball"
     CURVEBALL = "CB", "Curveball"
     CHANGEUP = "CH", "Changeup"
@@ -52,10 +52,10 @@ class Pitch(models.Model):
     """The data for each pitch"""
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     pitcher = models.ForeignKey(Pitcher, related_name="pitches", on_delete=models.CASCADE)
-    game = models.ForeignKey(Game, related_name="pitches", on_delete=models.CASCADE)
+    # game = models.ForeignKey(Game, related_name="pitches", on_delete=models.CASCADE)
     date = models.DateField()
-    kind = models.CharField(max_length=5, choices=PitchKind.choices)
+    pitch_type = models.CharField(max_length=5, choices=PitchType.choices)
     result = models.CharField(max_length=100, choices=PitchResult.choices)
     pitch_count = models.IntegerField()
     velo = models.DecimalField(max_digits=5, decimal_places=2)
-    timestamp = models.DateTimeField(default=timezone.now)
+    # timestamp = models.DateTimeField(default=timezone.now)
