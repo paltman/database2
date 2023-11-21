@@ -42,31 +42,19 @@ def entry(request):
     date_value = request.session.get('date')
     team_value = request.session.get('team')
 
-    # Calculate the maximum pitch count for the specified pitcher and date.
+        # Calculate the maximum pitch count for the specified pitcher and date.
     pitch_count = Pitch.objects.filter(pitcher=pitcher_value, date=date_value, team=team_value).aggregate(Max('pitch_count'))['pitch_count__max'] or 0
 
-    # Check if the request method is POST
     if request.method == 'POST':
         form = PitchForm(request.POST)
-        print("Form data before validation:", form.data)
-                # Populate the form with the session variables
-        form.initial['team'] = team_value
-        form.initial['pitcher'] = pitcher_value
-        form.initial['date'] = date_value
         if form.is_valid():
-            print('hey')
             # Increment the "Pitch Count" field by 1
             pitch_count += 1
             form.instance.pitch_count = pitch_count
-
-            # Save the form data to the database
             form.save()
-
-            # You can add a success message or other logic here
             return redirect('entry')  # Redirect back to the same page
     else:
-        print('form was not validated')
-        # Populate the form with the session variables
+        # Pre-Populate the form with the session variables
         form = PitchForm(initial={
             'team': team_value,
             'pitcher': pitcher_value,
