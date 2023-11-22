@@ -3,6 +3,11 @@ from dataentry.forms import PitchForm
 from dataentry.models import Pitch, Team, Pitcher
 from django.db.models import Max
 
+# Imports for registration 
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse 
+from dataentry.forms import CustomUserCreationForm
+
 
 # Create your views here.
 '''home page'''
@@ -107,3 +112,26 @@ def dashboard(request):
     context = {}
     return render(request, 'dataentry/dashboard.html', context)
 
+
+'''register user page'''
+def register(request):
+    # If it's a GET request, we'll just render the form with the context here
+    if request.method == 'GET':
+        return render(
+            request, "registration/register.html",
+            {"form": CustomUserCreationForm}
+        )
+    # If its a POST, a new custom form will be created and the new user will be saved and logged in and redirected to the dashboard
+    elif request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            UserCreationForm(request, user)
+            return redirect(reverse("dashboard"))
+
+
+'''my team page'''
+def myteam(request):
+    # print all the pitchers on the team that the user is associated with
+    context = {}
+    return render(request, 'dataentry/myteam.html', context)
