@@ -20,6 +20,7 @@ def settings(request):
         pitcher = Pitcher.objects.get(id=request.POST.get('pitcher'))
 
         # Set the session variables to the names instead of the ids
+        # This is so we can display the names in the entry view
         request.session['team'] = team.name
         request.session['pitcher'] = pitcher.name
         request.session['date'] = request.POST.get('date')
@@ -46,7 +47,7 @@ def entry(request):
     date_value = request.session.get('date')
     team_value = request.session.get('team')
 
-    # Get the pitcher and team instances using the names
+    # Get the pitcher and team names from the values which pull in ids
     pitcher = Pitcher.objects.get(name=pitcher_value)
     team = Team.objects.get(name=team_value)
 
@@ -61,7 +62,6 @@ def entry(request):
 
         # Calculate the maximum pitch count for the specified pitcher and date so we know what to add to
         pitch_count = Pitch.objects.filter(pitcher=pitcher, date=date_value, team=team).aggregate(Max('pitch_count'))['pitch_count__max'] or 0
-
 
         if form.is_valid():
             # Increment the "Pitch Count" field by 1
@@ -82,6 +82,7 @@ def entry(request):
 
     # Load in all the data from the Teams and Pitcher models 
         # Pass the available teams and pitchers to the context
+    # Limit pitchers to the ones on the selected team
     teams = Team.objects.all()
     pitchers = Pitcher.objects.filter(team=team)
 
@@ -94,7 +95,7 @@ def entry(request):
         'pitchers': pitchers,
     }
 
-    print(pitcher_value)
+    # print(pitcher_value)
     return render(request, 'dataentry/entry.html', context)
 
 
