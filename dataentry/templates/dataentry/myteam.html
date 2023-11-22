@@ -1,3 +1,48 @@
-<h1> Hello World </h1>
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
 
-<a href="{% url 'settings' %}">Start Tracking</a>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/ico" sizes="64x64" href="{% static 'dataentry/img/favicon.ico' %}">
+    <title>dataBase</title>
+    <style>
+        .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #333; /* Change the background color as needed */
+        color: #fff; /* Change the text color as needed */
+        padding: 10px 20px;
+        }
+        
+        /* Style for the buttons */
+        .navbar-button {
+            margin: 0 10px;
+            padding: 5px 10px;
+            background-color: #555; /* Change the button background color */
+            border: none;
+            color: #fff; /* Change the button text color */
+            cursor: pointer;
+        }
+
+        /* Style for the "dataBase" text */
+        .navbar-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<div class="navbar">
+    <div class="navbar-title">dataBase</div>
+    <div>
+        <a href="{% url 'settings' %}" class="navbar-button">Start Tracking</a>
+        <a href="{% url 'dashboard' %}" class="navbar-button">Dashboard</a>
+    </div>
+</div>    

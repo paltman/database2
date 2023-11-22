@@ -135,3 +135,9 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'dataentry/static')]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = "myteam"
+
+AUTH_USER_MODEL = 'dataentry.CustomUser'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]

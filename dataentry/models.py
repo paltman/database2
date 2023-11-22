@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import AbstractUser
 
 '''Having multiple models in one file allows the project to scale and be more organized.'''
 
@@ -66,3 +67,11 @@ class Pitch(models.Model):
     pitch_count = models.IntegerField()
     velo = models.DecimalField(max_digits=5, decimal_places=2)
     # timestamp = models.DateTimeField(default=timezone.now)
+
+# Needed to update settings for this one
+class CustomUser(AbstractUser):
+    email = models.EmailField(unique=True)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return self.username

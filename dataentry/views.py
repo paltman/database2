@@ -125,8 +125,8 @@ def register(request):
     elif request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            UserCreationForm(request, user)
+            CustomUser = form.save()
+            UserCreationForm(request, CustomUser)
             return redirect(reverse("dashboard"))
 
 
