@@ -18,6 +18,12 @@
             align-items: center;
             height: 100vh;
         }
+        .form-inputs {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 10px;
+        }
         .container {
             background-color: #ffffff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -32,25 +38,28 @@
         }
         .form {
             flex: 1;
-            padding: 1px 20px; /* Adjust top and bottom padding (0px) and left and right padding (20px) */
+            padding: 1px 10px; /* Adjust top and bottom padding (0px) and left and right padding (20px) */
             display: flex;
             flex-direction: column;
+            font-size: 17px;
         }
-
         .table-container {
             flex: 1;
             background-color: #f0f0f0;
-            padding: 20px;
-            height: 400px; /* Set the desired fixed height */
+            padding: 30px;
+            height: 400px; 
+            width: 500px; /* Set the desired fixed height and width */
             overflow-y: auto; /* Add a vertical scrollbar when needed */
         }
         table {
             width: 100%;
             border-collapse: collapse;
+            font-size: 14px;
         }
         th, td {
-            padding: 4px;
+            padding: 10px;
             text-align: center;
+            white-space: nowrap;
         }
         th {
             background-color: #333;
@@ -88,7 +97,6 @@
         color: #fff; /* Change the text color as needed */
         padding: 10px 20px;
         }
-        
         /* Style for the buttons */
         .navbar-button {
             margin: 0 10px;
@@ -98,69 +106,96 @@
             color: #fff; /* Change the button text color */
             cursor: pointer;
         }
-
         /* Style for the "dataBase" text */
         .navbar-title {
             font-size: 24px;
             font-weight: bold;
         }
+        .mainform {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            align-items: normal;
+            padding: 10px ;
+        }
+        .mainform label {
+            margin-bottom: 5px;
+        }
+
+        .mainform input[type="submit"] {
+            margin-top: 10px;
+        }
+        .sessionvars {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 0px;
+        }
     </style>
 </head>
-<body>
 
+<body>
 <div class="navbar">
     <div class="navbar-title">dataBase</div>
-    <div>
-        <a href="{% url 'home' %}" class="navbar-button">Home</a>
-        <a href="{% url 'dashboard' %}" class="navbar-button">Dashboard</a>
+        <div class="sessionvars">
+            <form class="form-inputs" action="{% url 'entry' %}" method="POST">
+                {% csrf_token %}
+                <div>
+                    <label for="{{ form.team.id_for_label }}">Team:</label>
+                    {{ form.team }}
+                </div>
+                <!-- Pitcher select field -->
+                <!--For each option in the dropdown, it checks whether the value matches the one stored in the form field (form.team.value or form.pitcher.value) or the value stored in the session variable (request.session.team or request.session.pitcher). If there's a match, that option is marked as selected.-->
+                <label for="id_pitcher">Pitcher:</label>
+                <select id="id_pitcher" name="pitcher">
+                    {% for pitcher in pitchers %}
+                        <option value="{{ pitcher.id }}" {% if pitcher.name == request.session.pitcher %}selected{% endif %}>{{ pitcher.name }}</option>
+                    {% endfor %}
+                </select>
+                <div>
+                    <label for="{{ form.date.id_for_label }}">Date:</label>
+                    {{ form.date }}
+                </div>  
+            </div>
+        <div>
+            <a href="{% url 'settings' %}" class="navbar-button">Settings</a>
+            <a href="{% url 'dashboard' %}" class="navbar-button">Dashboard</a>
+        </div>   
     </div>
-</div>    
-        <div class="container">
-        <br>
-        <br>
-        <form method="post">
-            {% csrf_token %}
-            <label for="id_team">Team:</label>
-            <input type="text" id="id_team" name="team" value="{{ form.team.value }}">
+
+    <div class="container">
+        <div class="mainform">
             <br>
-            <label for="id_pitcher">Pitcher:</label>
-            <input type="text" id="id_pitcher" name="pitcher" value="{{ form.pitcher.value }}">
-            <br>
-            <label for="id_date">Date:</label>
-            <input type="date" id="id_date" name="date" value="{{ form.date.value }}">
+                <label>Pitch Type</label>
+                {{ form.pitch_type }}
             <br>
             <br>
+                <label>Velo</label>
+                {{ form.velo }}
             <br>
             <br>
-            <label >Pitch Type</label>
-            {{ form.pitch_type }}
+                <label>Result</label>
+                {{ form.result }}
             <br>
             <br>
-            <label >Velo</label>
-            {{ form.velo }}
-            <br>
-            <br>
-            <label >Result</label>
-            {{ form.result }}
-            <br>
-            <br>
-            <input type="submit" value="Submit Pitch" />
-        </form>
+                <input type="submit" value="Submit Pitch" />
+            </form>
+        </div>
         <div class="table-container">
             <h2>Today's Data</h2>
-            <table class="table">
-                <thead>
-                    <tr class="table-header">
-                        <th>Pitcher</th>
-                        <th>Count</th>
-                        <th>Pitch Type</th>
-                        <th>Velo</th>
-                        <th>Result</th>
-                    </tr>
-                </thead>
+                <table class="table">
+                    <thead>
+                        <tr class="table-header">
+                            <th>Pitcher</th>
+                            <th>Count</th>
+                            <th>Type</th>
+                            <th>Velo</th>
+                            <th>Result</th>
+                        </tr>
+                    </thead>
                 {% for instance in pitchdata %}
                     <tr>
-                        <td>{{ instance.pitcher }}</td>
+                        <td>{{ instance.pitcher.name }}</td>
                         <td>{{ instance.pitch_count }}</td>
                         <td>{{ instance.pitch_type }}</td>
                         <td>{{ instance.velo }}</td>

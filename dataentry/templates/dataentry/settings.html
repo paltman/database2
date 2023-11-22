@@ -74,7 +74,7 @@
     <!-- Your JavaScript function for form submission -->
     <script>
         function submitFormAndNavigate() {
-            document.getElementById('PitchingForm').submit();
+            document.getElementById('PitchForm').submit();
         }
     </script>
 
@@ -88,24 +88,45 @@
         <div class="container">
         <br>
         <br>
-        <form method="post" id="PitchingForm" action="{% url 'settings' %}">
+        <form method="post" id="PitchForm" action="{% url 'settings' %}">
             {% csrf_token %}
             <label for="id_team">Team:</label>
-            {{ form.team }}
+            <select id="id_team" name="team">
+                <option value="" {% if not request.session.team %}selected{% endif %}>Select Team</option>
+                {% for team in teams %}
+                    <option value="{{ team.id }}" {% if team.id == request.session.team %}selected{% endif %}>{{ team.name }}</option>
+                {% endfor %}
+            </select>
             <br>
             <br>
             <label for="id_pitcher">Pitcher:</label>
-            {{ form.pitcher }}
+            <select id="id_pitcher" name="pitcher">
+                <option value="" {% if not request.session.team %}selected{% endif %}>Select Pitcher</option>
+                {% for pitcher in pitchers %}
+                    <option value="{{ pitcher.id }}" data-team="{{ pitcher.team.id }}" {% if pitcher.id == request.session.pitcher %}selected{% endif %}>{{ pitcher.name }}</option>
+                {% endfor %}
+            </select>
             <br>
             <br>
             <label for="id_date">Date:</label>
-            <input type="date" id="id_date" name="date" value="{{ form.date.value }}">
+            <input type="date" id="id_date" name="date" value="{{ request.session.date }}">
             <br>
             <br>
-            <br>
-            <br>
-            <input type="button" value="Enter" onclick="submitFormAndNavigate()" />
+            <input type="submit" value="Submit">
         </form>
+        <script>
+            document.getElementById('id_team').addEventListener('change', function() {
+                var teamId = this.value;
+                var pitcherOptions = document.querySelectorAll('#id_pitcher option');
+                pitcherOptions.forEach(function(option) {
+                    if (option.dataset.team == teamId) {
+                        option.style.display = 'block';
+                    } else {
+                        option.style.display = 'none';
+                    }
+                });
+            });
+        </script>
     </div>
 </body>
 </html>

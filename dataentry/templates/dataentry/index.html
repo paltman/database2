@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     {% load static %}
 
@@ -9,10 +9,13 @@
     <title>dataBase</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             background-color: #f0f0f0;
             text-align: center;
+            margin: 0;
+            padding: 0;
         }
+
         .container {
             background-color: #ffffff;
             margin: 100px auto;
@@ -20,35 +23,63 @@
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+
         h1 {
-            font-size: 24px;
+            font-size: 2em;
+            color: #007BFF;
+            margin-bottom: 10px;
         }
+
         p {
-            font-size: 18px;
+            font-size: 1.2em;
+            color: #555;
+            margin-bottom: 20px;
         }
+
         .btn {
             display: inline-block;
             background-color: #007BFF;
             color: #fff;
-            padding: 10px 20px;
+            padding: 12px 24px;
             border: none;
             border-radius: 5px;
             text-decoration: none;
             font-weight: bold;
             cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .logo {
+            width: 200px;
+            height: 200px;
+            margin-bottom: 20px;
+        }
+
+        .vers {
+            font-size: .9em;
+            color: #555;
+            margin-top: 70px;
+            font-style: italic;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <img src="{% static 'dataentry/img/dataBASE.png' %}" alt="dataBase Logo" width="200" height="200">
+        <img src="{% static 'dataentry/img/dataBASE.png' %}" alt="dataBase Logo" class="logo">
         <h1>Welcome to dataBase</h1>
         <p>Click to start tracking your data!</p>
         <a href="{% url 'settings' %}" class="btn">Start Tracking</a>
-        <p>Click to view your team's DashBoard</p>
+        <p>Click to view your team's Dashboard</p>
         <a href="{% url 'dashboard' %}" class="btn">View Dashboard</a>
+        <div class="vers"
+        <p>Colossians 3:17 And whatever you do, in word or in deed, do everything in the name of the Lord Jesus, giving thanks to God the Father through him.</p>
+        </div>
     </div>
-
 </body>
 </html>
