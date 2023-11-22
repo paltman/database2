@@ -20,9 +20,9 @@
         }
         .form-inputs {
             display: flex;
-            justify-content: flex-start;
+            justify-content: center;
             gap: 20px;
-            padding: 20px;
+            padding: 10px;
         }
         .container {
             background-color: #ffffff;
@@ -111,74 +111,88 @@
             font-size: 24px;
             font-weight: bold;
         }
+        .mainform {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            align-items: normal;
+            padding: 10px ;
+        }
+        .mainform label {
+            margin-bottom: 5px;
+        }
+
+        .mainform input[type="submit"] {
+            margin-top: 10px;
+        }
+        .sessionvars {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 0px;
+        }
     </style>
 </head>
-<body>
 
-    <div class="navbar">
-        <div class="navbar-title">dataBase</div>
-        <!-- <div class="form-inputs">
-            <div>
-                <label for="{{ form.team.id_for_label }}">Team:</label>
-                {{ form.team }}
+<body>
+<div class="navbar">
+    <div class="navbar-title">dataBase</div>
+        <div class="sessionvars">
+            <form class="form-inputs" action="{% url 'entry' %}" method="POST">
+                {% csrf_token %}
+                <div>
+                    <label for="{{ form.team.id_for_label }}">Team:</label>
+                    {{ form.team }}
+                </div>
+                <!-- Pitcher select field -->
+                <!--For each option in the dropdown, it checks whether the value matches the one stored in the form field (form.team.value or form.pitcher.value) or the value stored in the session variable (request.session.team or request.session.pitcher). If there's a match, that option is marked as selected.-->
+                <label for="id_pitcher">Pitcher:</label>
+                <select id="id_pitcher" name="pitcher">
+                    {% for pitcher in pitchers %}
+                        <option value="{{ pitcher.id }}" {% if pitcher.name == request.session.pitcher %}selected{% endif %}>{{ pitcher.name }}</option>
+                    {% endfor %}
+                </select>
+                <div>
+                    <label for="{{ form.date.id_for_label }}">Date:</label>
+                    {{ form.date }}
+                </div>  
             </div>
-            <div>
-                <label for="{{ form.pitcher.id_for_label }}">Pitcher:</label>
-                {{ form.pitcher }}
-            </div>
-            <div>
-                <label for="{{ form.date.id_for_label }}">Date:</label>
-                {{ form.date }}
-            </div>  
-        </div> -->
         <div>
-            <a href="{% url 'home' %}" class="navbar-button">Home</a>
+            <a href="{% url 'settings' %}" class="navbar-button">Settings</a>
             <a href="{% url 'dashboard' %}" class="navbar-button">Dashboard</a>
         </div>   
     </div>
 
-<div class="container">
-    <form class="form" action="{% url 'entry' %}" method="POST">
-        {% csrf_token %}
-        <div>
-            <label for="{{ form.team.id_for_label }}">Team:</label>
-            {{ form.team }}
+    <div class="container">
+        <div class="mainform">
+            <br>
+                <label>Pitch Type</label>
+                {{ form.pitch_type }}
+            <br>
+            <br>
+                <label>Velo</label>
+                {{ form.velo }}
+            <br>
+            <br>
+                <label>Result</label>
+                {{ form.result }}
+            <br>
+            <br>
+                <input type="submit" value="Submit Pitch" />
+            </form>
         </div>
-        <div>
-            <label for="{{ form.pitcher.id_for_label }}">Pitcher:</label>
-            {{ form.pitcher }}
-        </div>
-        <div>
-            <label for="{{ form.date.id_for_label }}">Date:</label>
-            {{ form.date }}
-        </div>  
-        <br>
-        <label>Pitch Type</label>
-        {{ form.pitch_type }}
-        <br>
-        <br>
-        <label>Velo</label>
-        {{ form.velo }}
-        <br>
-        <br>
-        <label>Result</label>
-        {{ form.result }}
-        <br>
-        <br>
-        <input type="submit" value="Submit Pitch" />
-    </form>
         <div class="table-container">
             <h2>Today's Data</h2>
-            <table class="table">
-                <thead>
-                    <tr class="table-header">
-                        <th>Pitcher</th>
-                        <th>Count</th>
-                        <th>Type</th>
-                        <th>Velo</th>
-                        <th>Result</th>
-                    </tr>
-                </thead>
+                <table class="table">
+                    <thead>
+                        <tr class="table-header">
+                            <th>Pitcher</th>
+                            <th>Count</th>
+                            <th>Type</th>
+                            <th>Velo</th>
+                            <th>Result</th>
+                        </tr>
+                    </thead>
                 {% for instance in pitchdata %}
                     <tr>
                         <td>{{ instance.pitcher.name }}</td>

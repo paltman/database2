@@ -6,11 +6,18 @@ from django.utils import timezone
 class Team(models.Model):
     name = models.CharField(max_length=150, unique=True)
 
+    # Now, the names of the teams and pitchers will be displayed in the dropdowns instead of their IDs.
+    def __str__(self):
+        return self.name
+
 
 class Pitcher(models.Model):
     '''models.CASCADE means that when the referenced Team is deleted, also delete the Pitcher instances that have a foreign key to them.'''
     team = models.ForeignKey(Team, related_name="pitchers", on_delete=models.CASCADE)
     name = models.CharField(max_length=150, unique=True)
+
+    def __str__(self):
+        return self.name
 
 
 # Game is like a pitching session, so this model is where we find the pitch count for each game designed by 'date'
