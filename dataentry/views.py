@@ -131,7 +131,18 @@ def register(request):
 
 
 '''my team page'''
+# the @login_required decorator is used to ensure that only logged-in users can access a certain view.
 def myteam(request):
-    # print all the pitchers on the team that the user is associated with
-    context = {}
+    # Fetch the team associated with the logged-in user
+    team = request.user.team
+
+    # Fetch all the pitchers associated with that team
+    pitchers = Pitcher.objects.filter(team=team)
+
+    # Pass the pitchers to the context
+    context = {
+        'team': team,
+        'pitchers': pitchers
+        }
+
     return render(request, 'dataentry/myteam.html', context)

@@ -36,6 +36,28 @@
             font-size: 24px;
             font-weight: bold;
         }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
     </style>
 </head>
 
@@ -46,3 +68,24 @@
         <a href="{% url 'dashboard' %}" class="navbar-button">Dashboard</a>
     </div>
 </div>    
+
+<div class="container">
+    <div class="table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Pitcher Name</th>
+                    <!-- Add more headers if you have more fields to display -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for pitcher in pitchers %}
+                    <tr>
+                        <td>{{ pitcher.name }}</td>
+                        <!-- Add more cells if you have more fields to display -->
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
