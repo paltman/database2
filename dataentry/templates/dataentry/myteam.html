@@ -58,12 +58,21 @@
             border-radius: 5px;
             overflow: hidden;
         }
+        .buttons {
+            display: flex;
+            align-items: center;
+            justify-content: start;
+        }
+        .buttons p {
+            margin-right: auto;
+        }
     </style>
 </head>
 
 <div class="navbar">
     <div class="navbar-title">dataBase</div>
-    <div>
+    <div class="buttons">
+        <p> {{ user }} </p>
         <a href="{% url 'settings' %}" class="navbar-button">Start Tracking</a>
         <a href="{% url 'dashboard' %}" class="navbar-button">Dashboard</a>
     </div>
@@ -74,7 +83,7 @@
         <table>
             <thead>
                 <tr>
-                    <th>Pitcher Name</th>
+                    <th>My Pitchers</th>
                     <!-- Add more headers if you have more fields to display -->
                 </tr>
             </thead>

@@ -46,13 +46,22 @@
             font-size: 24px;
             font-weight: bold;
         }
+        .buttons {
+            display: flex;
+            align-items: center;
+            justify-content: start;
+        }
+        .buttons p {
+            margin-right: auto;
+        }
     </style>
 </head>
 <body>
     <div class="navbar">
         <div class="navbar-title">dataBase</div>
-        <div>
-            <a href="{% url 'myteam' %}" class="navbar-button">My team</a>
+        <div class="buttons">
+            <p> {{ user }} </p>
+            <a href="{% url 'myteam' %}" class="navbar-button">My Team</a>
             <a href="{% url 'entry' %}" class="navbar-button">Pitch Entry</a>
         </div>
     </div>

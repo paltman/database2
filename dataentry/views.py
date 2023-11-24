@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect
 from dataentry.forms import PitchForm
-from dataentry.models import Pitch, Team, Pitcher
+from dataentry.models import Pitch, Team, Pitcher, CustomUser
 from django.db.models import Max
 
 # Imports for registration 
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse 
 from dataentry.forms import CustomUserCreationForm
+from django.contrib.auth import get_user_model
+
 
 
 # Create your views here.
@@ -17,43 +19,51 @@ def home(request):
     return render(request, 'dataentry/index.html', context)
 
 
+
 '''Settings: Set your date, pitcher, and team'''
 def settings(request):
     if request.method == 'POST':
-        # Get the team and pitcher instances
+        # Get the team and pitcher instances to record in the session variables
         team = Team.objects.get(id=request.POST.get('team'))
         pitcher = Pitcher.objects.get(id=request.POST.get('pitcher'))
 
-        # Set the session variables to the names instead of the ids
+        # Allow users to set the session variables to the names instead of the ids
         # This is so we can display the names in the entry view
         request.session['team'] = team.name
         request.session['pitcher'] = pitcher.name
         request.session['date'] = request.POST.get('date')
 
-        # Redirect to a page after successfully submitting data
-        return redirect('entry')  # Replace 'entry' with your desired URL name
-
-    teams = Team.objects.all()
-    pitchers = Pitcher.objects.all()
+        # Redirect to entry page
+        return redirect('entry') 
+    
+    # Get the logged-in user's team and pitchers
+    CustomUser = get_user_model()
+    user = CustomUser.objects.get(username=request.user.username)
+    teams = Team.objects.filter(id=user.team_id)
+    pitchers = Pitcher.objects.filter(team_id=user.team_id)
+    # print(user.team_id)
+    # print(user.username)
     # If the request method is not POST (i.e., it's a GET request), render the settings page
     context = {
         'teams': teams,
         'pitchers': pitchers,
         'date': request.session.get('date', ''),
+        'user': user.username,
     }
     
     return render(request, 'dataentry/settings.html', context)
 
+
+
 '''data adding page'''
 
 def entry(request):
-    # Get the pitcher, date_value, and team from the session variables
+    # Get the pitcher, date, and team from the session variables
     pitcher_value = request.session.get('pitcher')
     date_value = request.session.get('date')
     team_value = request.session.get('team')
 
-    # Get the pitcher and team names from the values which pull in ids
-    pitcher = Pitcher.objects.get(name=pitcher_value)
+    # not sure why team_value is being rejected, but adding this extra step fixes it
     team = Team.objects.get(name=team_value)
 
     if request.method == 'POST':
@@ -77,22 +87,22 @@ def entry(request):
     else:
         # Pre-Populate the form with the date, rest are pre-populated in html
         form = PitchForm(initial={
-            'pitcher': pitcher,
-            'team': team,
+            'pitcher': pitcher_value,
+            'team': team_value,
             'date': date_value,
         })
 
     # Pull in all the data (for that team and that date, for table view.)
     pitchdata = Pitch.objects.filter(team=team, date=date_value)
 
-    # Load in all the data from the Teams and Pitcher models 
-        # Pass the available teams and pitchers to the context
-    # Limit pitchers to the ones on the selected team
-    teams = Team.objects.all()
-    pitchers = Pitcher.objects.filter(team=team)
+    # Get the logged-in user's team and pitchers
+    CustomUser = get_user_model()
+    user = CustomUser.objects.get(username=request.user.username)
+    teams = Team.objects.filter(id=user.team_id)
+    pitchers = Pitcher.objects.filter(team_id=user.team_id)
 
     context = {
-        'team_name': team_value,
+        'team_name': team,
         'pitcher_name': pitcher_value,
         'pitchdata': pitchdata,
         'form': form,
@@ -113,6 +123,7 @@ def dashboard(request):
     return render(request, 'dataentry/dashboard.html', context)
 
 
+
 '''register user page'''
 def register(request):
     # If it's a GET request, we'll just render the form with the context here
@@ -131,7 +142,6 @@ def register(request):
 
 
 '''my team page'''
-# the @login_required decorator is used to ensure that only logged-in users can access a certain view.
 def myteam(request):
     # Fetch the team associated with the logged-in user
     team = request.user.team

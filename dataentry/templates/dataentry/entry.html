@@ -131,6 +131,14 @@
             gap: 10px;
             padding: 0px;
         }
+        .buttons {
+            display: flex;
+            align-items: center;
+            justify-content: start;
+        }
+        .buttons p {
+            margin-right: auto;
+        }
     </style>
 </head>
 
@@ -140,27 +148,30 @@
         <div class="sessionvars">
             <form class="form-inputs" action="{% url 'entry' %}" method="POST">
                 {% csrf_token %}
-                <div>
-                    <label for="{{ form.team.id_for_label }}">Team:</label>
-                    {{ form.team }}
-                </div>
+                <label for="id_team">Team:</label>
+                    <select id="id_team" name="team">
+                        {% for team in teams %}
+                            <option value="{{ team.id }}" {% if team.id == request.session.team %}selected{% endif %}>{{ team.name }}</option>
+                        {% endfor %}
+                    </select>
                 <!-- Pitcher select field -->
                 <!--For each option in the dropdown, it checks whether the value matches the one stored in the form field (form.team.value or form.pitcher.value) or the value stored in the session variable (request.session.team or request.session.pitcher). If there's a match, that option is marked as selected.-->
                 <label for="id_pitcher">Pitcher:</label>
-                <select id="id_pitcher" name="pitcher">
-                    {% for pitcher in pitchers %}
-                        <option value="{{ pitcher.id }}" {% if pitcher.name == request.session.pitcher %}selected{% endif %}>{{ pitcher.name }}</option>
-                    {% endfor %}
-                </select>
+                    <select id="id_pitcher" name="pitcher">
+                        {% for pitcher in pitchers %}
+                            <option value="{{ pitcher.id }}" {% if pitcher.name == request.session.pitcher %}selected{% endif %}>{{ pitcher.name }}</option>
+                        {% endfor %}
+                    </select>
                 <div>
                     <label for="{{ form.date.id_for_label }}">Date:</label>
-                    {{ form.date }}
+                        {{ form.date }}
                 </div>  
             </div>
-        <div>
-            <a href="{% url 'settings' %}" class="navbar-button">Settings</a>
+        <div class="buttons">
+            <p> {{ user }} </p>
+            <a href="{% url 'myteam' %}" class="navbar-button">My Team</a>
             <a href="{% url 'dashboard' %}" class="navbar-button">Dashboard</a>
-        </div>   
+        </div>
     </div>
 
     <div class="container">
