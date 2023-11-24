@@ -138,7 +138,7 @@ def register(request):
         if form.is_valid():
             CustomUser = form.save()
             UserCreationForm(request, CustomUser)
-            return redirect(reverse("dashboard"))
+            return redirect(reverse("login"))
 
 
 '''my team page'''
