@@ -1,0 +1,9 @@
+# Python binaries and cache
+*.pyc
+venv
+__pycache__
+.python_history
+
+# Editor / OS files
+.vscode/*
+.DS_Store
