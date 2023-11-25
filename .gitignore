@@ -7,3 +7,5 @@ __pycache__
 # Editor / OS files
 .vscode/*
 .DS_Store
+
+.ruff_cache
