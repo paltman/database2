@@ -1,9 +1,7 @@
 from django.db.models import Max
 from django.shortcuts import render, redirect
-from django.urls import reverse
 
-from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import get_user_model, login
 
 from .forms import PitchForm, CustomUserCreationForm
 from .models import Pitch, Team, Pitcher
@@ -118,37 +116,26 @@ def dashboard(request):
     return render(request, "dataentry/dashboard.html", context)
 
 
-
 def register(request):
-    """register user page"""
-    # If it's a GET request, we'll just render the form with the context here
-    if request.method == "GET":
-        return render(
-            request, "registration/register.html",
-            {"form": CustomUserCreationForm}
-        )
-    # If its a POST, a new custom form will be created and the new user will be saved and logged in
-    # and redirected to the dashboard
-    elif request.method == "POST":
+    """Register a new user
+
+    Upon successful registration, authenticate and redirect user to dashboard
+    """
+    if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            CustomUser = form.save()
-            UserCreationForm(request, CustomUser)
-            return redirect(reverse("login"))
+            user = form.save()
+            login(request, user)  # sets the auth cookie
+            request.session.set_expiry(0)  # session expires when browser is closed
+            return redirect("dashboard")
+    else:
+        form = CustomUserCreationForm()
+    return render(request, "registration/register.html", {"form": form})
 
 
-def myteam(request):
-    """my team page"""
-    # Fetch the team associated with the logged-in user
-    team = request.user.team
-
-    # Fetch all the pitchers associated with that team
-    pitchers = Pitcher.objects.filter(team=team)
-
-    # Pass the pitchers to the context
+def my_team(request):
     context = {
-        "team": team,
-        "pitchers": pitchers
-        }
-
+        "team": request.user.team,
+        "pitchers": request.user.team.pitchers.all()
+    }
     return render(request, "dataentry/myteam.html", context)

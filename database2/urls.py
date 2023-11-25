@@ -29,5 +29,5 @@ urlpatterns = [
     path("entry/", views.entry, name="entry"),
     path("dashboard/", views.dashboard, name="dashboard"),
     path("register/", views.register, name="register"),
-    path("myteam/", views.myteam, name="myteam"),
+    path("myteam/", views.my_team, name="myteam"),
 ]
