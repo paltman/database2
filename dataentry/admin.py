@@ -1,7 +1,7 @@
 from django.contrib import admin
-from dataentry.models import Pitch, Pitcher, Team, Game, CustomUser
 
-# Register your models here.
+from .models import Pitch, Pitcher, Team, Game, CustomUser
+
 
 admin.site.register(Pitch)
 admin.site.register(Pitcher)
