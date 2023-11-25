@@ -1,0 +1,27 @@
+[tool.ruff]
+exclude = [
+    ".tox",
+    ".git",
+    "*/migrations/*",
+    "*/static/CACHE/*",
+    "docs",
+    "node_modules",
+]
+ignore = []
+line-length = 120
+select = [
+    "E",
+    "F",
+    "Q",
+    "W",
+]
+
+[tool.ruff.flake8-quotes]
+inline-quotes = "double"
+
+[tool.ruff.isort]
+section-order = ["future", "standard-library", "django", "third-party", "first-party", "local-folder"]
+lines-after-imports = 2
+
+[tool.ruff.isort.sections]
+"django" = ["django"]
