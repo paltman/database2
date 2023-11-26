@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/ico" sizes="64x64" href="{% static 'dataentry/img/favicon.ico' %}">
+    <title>dataBase</title>
+    <style>
+        .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #333; /* Change the background color as needed */
+        color: #fff; /* Change the text color as needed */
+        padding: 10px 20px;
+        }
+        
+        /* Style for the buttons */
+        .navbar-button {
+            margin: 0 10px;
+            padding: 5px 10px;
+            background-color: #555; /* Change the button background color */
+            border: none;
+            color: #fff; /* Change the button text color */
+            cursor: pointer;
+        }
+
+        /* Style for the "dataBase" text */
+        .navbar-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .buttons {
+            display: flex;
+            align-items: center;
+            justify-content: start;
+        }
+        .buttons p {
+            margin-right: auto;
+        }
+    </style>
+</head>
+
+<div class="navbar">
+    <div class="navbar-title">dataBase</div>
+    <div class="buttons">
+        <p> {{ user }} </p>
+        <a href="{% url 'settings' %}" class="navbar-button">Start Tracking</a>
+        <a href="{% url 'dashboard' %}" class="navbar-button">Dashboard</a>
+    </div>
+</div>    
+
+<div class="container">
+    <div class="table">
+        <table>
+            <thead>
+                <tr>
+                    <th>My Pitchers</th>
+                    <!-- Add more headers if you have more fields to display -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for pitcher in pitchers %}
+                    <tr>
+                        <td>{{ pitcher.name }}</td>
+                        <!-- Add more cells if you have more fields to display -->
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
