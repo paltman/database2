@@ -49,7 +49,7 @@ class PitchResult(models.TextChoices):
     BALL = "BALL", "Ball"
     STRIKE_LOOKING = "K Looking", "Strike Looking"
     STRIKE_SWINGING = "K Swinging", "Strike Swinging"
-    FOUL = "FB", "Foul Ball"
+    FOUL = "Foul Ball", "Foul Ball"
     BIP_OUT = "BIP OUT", "BIP Out"
     SINGLE = "SGL", "Single"
     DOUBLE = "DBL", "Double"
