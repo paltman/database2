@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 
+import dj_database_url
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,7 +29,7 @@ SECRET_KEY = "django-insecure-x$!z)4u#y$zy=h$3i1bgvbopr3le8vzoc#43n@9xg6xlvi1im&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["databaseapp.pythonanywhere.com", "127.0.0.1"]
+ALLOWED_HOSTS = ["databaseapp.pythonanywhere.com", "127.0.0.1", "localhost"]
 
 
 # Application definition
@@ -39,11 +42,13 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # My apps
-    "dataentry",
+    "database2",
+    "database2.dataentry",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -58,7 +63,7 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         # my templates in DIRS
-        "DIRS": [os.path.join(BASE_DIR, "dataentry/templates")],
+        "DIRS": [os.path.join(BASE_DIR, "database2/templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -76,21 +81,9 @@ WSGI_APPLICATION = "database2.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "neondb",
-        "USER": "drewbeno1",
-        "PASSWORD": "CEBInvDq13or",
-        "HOST": "ep-small-silence-60017904-pooler.us-east-2.aws.neon.tech",
-        "PORT": "5432",           # Leave it empty to use the default PostgreSQL port (5432).
-            "OPTIONS": {
-            "sslmode": "require",
-        }
-    }
+    "default": dj_database_url.config(conn_max_age=600),
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -127,7 +120,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "static/"
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "dataentry/static")]
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "database2/static")]
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -136,7 +132,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGIN_REDIRECT_URL = "myteam"
 
-AUTH_USER_MODEL = "dataentry.CustomUser"
+AUTH_USER_MODEL = "database2.CustomUser"
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",

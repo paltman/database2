@@ -1,2 +1,5 @@
 Django
-psycopg2-binary
+psycopg2
+gunicorn
+dj-database-url
+whitenoise[brotli]
