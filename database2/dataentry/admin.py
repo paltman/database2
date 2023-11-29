@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import Pitch, Pitcher, Team, Game, CustomUser
+from ..models import CustomUser
+from .models import Pitch, Pitcher, Team, Game
 
 
 admin.site.register(Pitch)
